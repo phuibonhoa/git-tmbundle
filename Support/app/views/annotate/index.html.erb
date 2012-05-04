@@ -3,9 +3,10 @@
 
 <% content_for :javascript do %>
   <script type='text/javascript'>
-    function show_annotation(revision)
+    function show_annotation(revision, file_path)
     {
-      $('content').update( dispatch({controller: 'annotate', action: "update", revision: revision}) );
+      file_path = typeof file_path !== 'undefined' ? file_path : '';
+      $('content').update( dispatch({controller: 'annotate', action: "update", revision: revision, file_path: file_path}) );
     }
   
     function keypress_listener(e) 

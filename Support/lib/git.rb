@@ -304,15 +304,27 @@ module SCM
     end
     
     def annotate(file_path, revision = nil)
+      args = (revision.nil? || revision.empty?) ? [] : [revision, '--']
       file = make_local_path(file_path)
-      args = [file]
-      args << revision unless revision.nil? || revision.empty?
+      args << [file]
       output = command("annotate", *args)
       if output.match(/^fatal:/)
         puts output 
         return nil
       end
       parse_annotation(output)
+    end
+    
+    def blame(file_path, revision = nil)
+      args = (revision.nil? || revision.empty?) ? [] : [revision, '--']
+      file = make_local_path(file_path)
+      args << [file]
+      output = command("blame", *args)
+      if output.match(/^fatal:/)
+        puts output 
+        return nil
+      end
+      parse_blame(output)
     end
     
     def describe(revision, options = {})

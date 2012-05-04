@@ -4,8 +4,8 @@ class AnnotateController < ApplicationController
   include DateHelpers
   layout "application", :except => "update"
   def index
-    @file_path = params[:file_path] || ENV['TM_FILEPATH']
-    @annotations = git.annotate(@file_path)
+    @file_path = (params[:file_path].nil? || params[:file_path].empty?) ? ENV['TM_FILEPATH'] : params[:file_path]
+    @annotations = git.blame(@file_path)
 
     if @annotations.nil?
       puts "Error.  Aborting"
@@ -16,11 +16,11 @@ class AnnotateController < ApplicationController
     render "index"
   end
   
-  def update
-    file_path = ENV['TM_FILEPATH']
+  def update    
+    file_path = (params[:file_path].nil? || params[:file_path].empty?) ? ENV['TM_FILEPATH'] : params[:file_path]
     revision = params[:revision]
 
-    @annotations = git.annotate(file_path, revision)
+    @annotations = git.blame(file_path, revision)
 
     if @annotations.nil?
       puts "Error.  Aborting"

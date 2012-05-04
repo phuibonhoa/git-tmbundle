@@ -119,6 +119,32 @@ module Parsers
     output
   end
 
+  def parse_blame(input)
+    require 'time.rb'
+    require 'date.rb'
+
+    output = []
+    match_item = /([^\t]+)\t/
+    match_last_item = /([^\)]+)\)/
+    input.split("\n").each do |line|
+      if /([^ ]+) (.*)\((.*)\s+(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\-+\d]+)\s+(\d+)\)(.*)$/i.match(line)
+        rev,path,author,date,ln,text = $1,$2,$3,$4,$5,$6
+        nc = /^0+$/.match(rev)
+        output << {
+          :rev => nc ? "-current-" : rev,
+          :path => path.strip,
+          :author => nc ? "-none-" : author.strip,
+          :date => nc ? "-pending-" : Time.parse(date),
+          :ln => ln.to_i,
+          :text => text
+        }
+      else
+        raise "didnt recognize line #{line}"
+      end
+    end
+    output
+  end
+
   def parse_merge(input)
     output = {:text => "", :conflicts => []}
     input.split("\n").each do |line|

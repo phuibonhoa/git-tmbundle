@@ -9,6 +9,7 @@
     line_class = line_class * " "
     formatted_line = {
       :rev => annotation[:rev], 
+      :path => annotation[:path],
       :author => annotation[:author], 
       :date => relative_date(annotation[:date]), 
       :ln => annotation[:ln], 
@@ -54,7 +55,7 @@ EOF
           <% if display[:rev]=="…" %>
             <%= display[:rev] %>
           <% else %>
-            <%= link_to_function display[:rev], "show_annotation('#{display[:rev]}');", :title => htmlize_attr(display[:rev_tooltip]) %>
+            <%= link_to_function display[:rev], "show_annotation('#{display[:rev]}', '#{display[:path]}');", :title => htmlize_attr(display[:rev_tooltip]) %>
           <% end %>
         </td>
         <td class="line-numbers"><%= make_non_breaking display[:author] %></td>
