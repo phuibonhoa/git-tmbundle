@@ -102,6 +102,7 @@ module Parsers
     match_item = /([^\t]+)\t/
     match_last_item = /([^\)]+)\)/
     input.split("\n").each do |line|
+      next if line =~ /ignoring REUC extension/i
       if /#{match_item}\(#{match_item}#{match_item}#{match_last_item}(.*)$/i.match(line)
         rev,author,date,ln,text = $1,$2,$3,$4,$5
         nc = /^0+$/.match(rev)
@@ -127,6 +128,7 @@ module Parsers
     match_item = /([^\t]+)\t/
     match_last_item = /([^\)]+)\)/
     input.split("\n").each do |line|
+      next if line =~ /ignoring REUC extension/i
       if /([^ ]+) (.*)\((.*)\s+(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\-+\d]+)\s+(\d+)\)(.*)$/i.match(line)
         rev,path,author,date,ln,text = $1,$2,$3,$4,$5,$6
         nc = /^0+$/.match(rev)
